@@ -1,4 +1,7 @@
 using AP1_P1_SamuelJavier.Components;
+using AP1_P1_SamuelJavier.DAL;
+using AP1_P1_SamuelJavier.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddBlazorBootstrap();
+
+//Obteniendo el constructor
+var ConStr = builder.Configuration.GetConnectionString("ConStr");
+
+//Inyectando el contexto
+
+ builder.Services.AddDbContext<Contexto>(Options => Options.UseSqlite(ConStr));
+
+//Inyectamos el Sevicio
+
+builder.Services.AddScoped<ArticulosServices>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
