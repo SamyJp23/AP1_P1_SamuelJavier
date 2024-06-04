@@ -1,0 +1,61 @@
+﻿<h3>Edit</h3>
+@inject ArticulosServices articuloService
+
+
+
+@code {
+    public int ArticuloId { get; set; }
+    public int? articuloId { get; set; }
+    Articulos Articulos { get; set; } = new Articulos();
+    public bool Existe { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ArticuloId != 0)
+        {
+            await Buscar();
+        }
+    }
+    public async Task Buscar()
+    {
+        Existe = false;
+        var encontro = await articuloService.Buscar(ArticuloId);
+
+        if (encontro != null)
+        {
+            Articulos = encontro;
+        }
+        else
+        {
+            Nuevo();
+        }
+    }
+
+    public async Task Guardar()
+    {
+        if (Validar())
+        {
+            return;
+        }
+
+        var guardo = await articuloService.Guardar(Articulos);
+        if (guardo)
+        {
+            Nuevo();
+        }
+    }
+
+    public void Nuevo()
+    {
+        Articulos = new Articulos();
+        Existe = false;
+    }
+
+    public bool Validar()
+    {
+        Existe = articuloService.Listar(a => a.Descripcion!.ToLower() == Articulos.Descripcion!.ToLower() && a.IdArticulo != Articulos.IdArticulo).Any();
+        return Existe;
+    }
+
+}
