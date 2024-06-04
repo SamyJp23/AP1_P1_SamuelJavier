@@ -74,5 +74,12 @@ public class ArticulosServices
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.IdArticulo == id);
     }
+    public List<Articulos> Listar(Expression<Func<Articulos, bool>> criterio)
+    {
+        return _contexto.Articulos
+            .AsNoTracking()
+            .Where(criterio)
+            .ToList();
+    }
 }
 
