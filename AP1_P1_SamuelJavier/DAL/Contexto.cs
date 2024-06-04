@@ -7,5 +7,5 @@ public class Contexto : DbContext
     public Contexto(DbContextOptions<Contexto> options) 
         : base(options) { }
 
-    DbSet<Articulos> Articulos { get; set; }
+    public DbSet<Articulos> Articulos { get; set; }
 }

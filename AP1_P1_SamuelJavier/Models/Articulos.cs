@@ -13,11 +13,11 @@ public class Articulos
     [Required(ErrorMessage = "El campo es obligatorio.")]
       public string? Descripcion { get; set; }
 
-    [Required(ErrorMessage = "El campo es obligatorio")]  
+    [Range(1, int.MaxValue, ErrorMessage = "El  Costo ser mayor que 0")]
     public decimal Costo { get; set; }
-    [Required(ErrorMessage = "El campo es obligatorio")]
+    [Range(1, int.MaxValue, ErrorMessage = "La Ganancia debe ser mayor que 0")]
     public decimal Ganancia { get; set; }
-    [Required(ErrorMessage = "El campo es obligatorio")]
+     [Range(1, int.MaxValue, ErrorMessage = "El precio debe ser mayor que 0")]
     public decimal Precio { get; set; }
 
        
