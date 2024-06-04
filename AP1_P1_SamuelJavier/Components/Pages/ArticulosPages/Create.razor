@@ -3,7 +3,7 @@
 @inject ArticulosServices articuloService
 @rendermode InteractiveServer
 
-<EditForm Model="Articulos" @OnInvalidSubmit="Guardar">
+<EditForm Model="Articulos" OnValidSubmit="Guardar">
     <DataAnnotationsValidator/>
 
     <div class="card shadow-lg border 0 rounded" style="background-color: #f8f9fa;"
@@ -32,7 +32,7 @@
                           </div>
                       </div>
                                         <div class="mb-3">
-                                              <label for="" class="form-label">Descripcion:</label>
+                                              <label for="Costo" class="form-label">Costo:</label>
                                                   <InputNumber @bind-Value="Articulos.Costo" class="form-control" />
                                                        <ValidationMessage For="@(() => Articulos.Costo)" />
                                         </div>
@@ -53,8 +53,8 @@
                                                           <div class="card-footer d-flex justify-content-center"
                                                            <div class="btn-group"
                                                             <button type="button" @onclick="Nuevo" class="btn btn-outline-primary"><span class="bi bi-plus"></span> Nuevo </button>
-                                                            <button  type ="succes" class="btn btn-outline-success"><span class="bi bi-floppy"></span> Guardar </button>
-                                                            <a  href="/Articulo/Index/" class="btn btn-outline-danger"><span class="bi bi-plus"></span> Retroceder </a>
+                                                            <button  type ="submit" class="btn btn-outline-success"><span class="bi bi-floppy"></span> Guardar </button>
+                                                            <a  href="/Articulo/Index/" class="btn btn-outline-danger"><span class="bi bi-arrow-bar-left"></span> Retroceder </a>
                                                            </div>
                                                           </div>
    </div>
@@ -67,6 +67,14 @@
     public Articulos Articulos { get; set; } = new Articulos();
     [Inject] protected ToastService toastService { get; set; }
 
+
+    protected override void OnInitialized()
+    {
+        if (articuloId.HasValue)
+        {
+            Articulos.IdArticulo = articuloId.Value;
+        }
+    }
     public void NotificacionGuardo()
     {
         toastService.Notify(new(ToastType.Success, $"Se guardo correctamente"));
@@ -76,19 +84,27 @@
     {
         toastService.Notify(new(ToastType.Danger, $"Error"));
     }
-    public async void Guardar()
+    public async Task Guardar()
     {
         if(await Validar())
         {
             NotificacionError();
             return;
         }
-        var guardo = await articuloService.Guardar(Articulos);
-        if (guardo)
+        else
         {
-            NotificacionGuardo();
-            Nuevo();
+            var guardo = await articuloService.Guardar(Articulos);
+            if (guardo)
+            {
+                NotificacionGuardo();
+                Nuevo();
+            }
+            else
+            {
+                NotificacionError();
+            }
         }
+        
     }
 
     public async Task<bool> Validar()
