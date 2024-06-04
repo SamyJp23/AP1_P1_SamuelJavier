@@ -1,23 +1,79 @@
-﻿<h3>Delete</h3>
+﻿@page "/Articulo/Delete/"
+@page "/Articulo/Delete/{ArticuloId:int}"
 @inject ArticulosServices articuloService
 @inject NavigationManager navigationManager
+@rendermode InteractiveServer
 
+
+@if (Articulo != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+
+         <div class="card-header  bg-primary text-white text-center py-2 rounded">
+                <h3><strong>Eliminar Articulo</strong></h3>
+            </div>
+            <div class="card-header">
+                <h3 class="text-danger">¿Estás seguro de que quieres eliminar el siguiente Articulo?</h3>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header">
+                                <h3 class="text-center"><strong>Datos del articulo</strong></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-primary border-2 borde">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>IdArticulo:</strong> @Articulo.IdArticulo</li>
+                                                    <li><strong>Descripcion:</strong> @Articulo.Descripcion</li>
+                                                    <li><strong>Costo:</strong> @Articulo.Costo</li>
+                                                    <li><strong>Ganancia:</strong> @Articulo.Ganancia</li>
+                                                    <li><strong>Precio:</strong> @Articulo.Precio</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-outline-danger" @onclick="Eliminar"><i class="bi bi-trash-fill"></i> Eliminar</button>
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+            </div>
+
+        </div>
+    </div>
+}
+else
+{
+<p>No se encontro el Articulo</p>
+}
 
 @code {
     [Parameter]
-    public int IdArticulo { get; set; }
+    public int ArticuloId { get; set; }
     public Articulos? Articulo { get; set; } = new Articulos();
 
 
     protected override async Task OnInitializedAsync()
     {
-        if (IdArticulo != 0)
+        if (ArticuloId != 0)
         {
-           Articulo  = await articuloService.Buscar(IdArticulo);
+           Articulo  = await articuloService.Buscar(ArticuloId);
         }
     }
 
-    public async Task EliminarTecnico()
+    public async Task Eliminar()
     {
         var eliminado = await articuloService.Eliminar(Articulo.IdArticulo);
         Volver();
@@ -25,6 +81,6 @@
 
     public void Volver()
     {
-        navigationManager.NavigateTo("/Tecnico/Index");
+        navigationManager.NavigateTo("/Articulo/Index");
     }
 }
