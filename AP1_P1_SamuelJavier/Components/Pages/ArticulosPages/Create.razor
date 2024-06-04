@@ -82,7 +82,7 @@
 
     public void NotificacionError()
     {
-        toastService.Notify(new(ToastType.Danger, $"Error"));
+        toastService.Notify(new(ToastType.Danger, $"Error al guardar ya existe otro articulo con esta Descripcion"));
     }
     public async Task Guardar()
     {
