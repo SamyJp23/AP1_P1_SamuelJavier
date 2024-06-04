@@ -1,0 +1,30 @@
+﻿<h3>Delete</h3>
+@inject ArticulosServices articuloService
+@inject NavigationManager navigationManager
+
+
+@code {
+    [Parameter]
+    public int IdArticulo { get; set; }
+    public Articulos? Articulo { get; set; } = new Articulos();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IdArticulo != 0)
+        {
+           Articulo  = await articuloService.Buscar(IdArticulo);
+        }
+    }
+
+    public async Task EliminarTecnico()
+    {
+        var eliminado = await articuloService.Eliminar(Articulo.IdArticulo);
+        Volver();
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Tecnico/Index");
+    }
+}
