@@ -4,7 +4,7 @@
 
 <EditForm Model="ListaArticulos" class="border shadow-lg p-3 rounded">
     <div class="card-header bg-primary text-white text-center py-2 rounded">
-        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta T&eacute;cnicos</h3>
+        <h3 style="font-weight: bold;" class="mb-0 font-weight-bold">Consulta</h3>
     </div>
     <div class="card-body">
         <div class="row mb-3 align-items-end">
@@ -42,6 +42,13 @@
         <thead class="bg-primary text-white">
             <tr>
                 <th>Id</th>
+                <th>Descripcion</th>
+                <th>Costo</th>
+                <th>Ganancia</th>
+                <th>Precio</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
                 
             </tr>
         </thead>
@@ -51,6 +58,12 @@
             {
                 <tr>
                     <td>@articulo.IdArticulo</td>
+                    <td>@articulo.Descripcion</td>
+                    <td>@articulo.Costo</td>
+                    <td>@articulo.Ganancia</td>
+                    <td>@articulo.Precio</td>
+
+
                    
                     <td>                 
                         <a href="/Articulo/Details/@articulo.IdArticulo" style="border: none; background-color: transparent;" class="btn-detalle">
@@ -59,14 +72,14 @@
 
                     </td>
                     <td>                     
-                        <a href="/Articulo/Details/@articulo.IdArticulo"  style="border: none; background-color: transparent;" class="btn-editar">
+                        <a href="/Articulo/Edit/@articulo.IdArticulo"  style="border: none; background-color: transparent;" class="btn-editar">
                             <span class="bi bi-marker-tip" style="font-size: 2rem;"></span>
                         </a>
                     </td>
 
                     <td>                    
-                        <a href="/Articulo/Details/@articulo.IdArticulo" style="border: none; background-color: transparent;" class="btn-eliminar">
-                            <span class="bi bi-dash-circle-fill" style="font-size: 2rem;"></span>
+                        <a href="/Articulo/Delete/@articulo.IdArticulo" style="border: none; background-color: transparent;" class="btn-eliminar">
+                            <span class="bi bi-trash" style="font-size: 2rem;"></span>
                         </a>
                     </td>
                 </tr>
@@ -75,7 +88,8 @@
     </table>
 </EditForm>
 @code {
-
+    [Parameter]
+    public int ArticuloId { get; set; }
     public List<Articulos> ListaArticulos = new List<Articulos>();
     private string valorFiltro = "";
     private string filtro = "Id";
@@ -100,6 +114,14 @@
             {
                 ListaArticulos  = articuloService.Listar(a => a.Precio == precio);
             }
+            else if (filtro == "costo" && decimal.TryParse(valorFiltro, out decimal costo))
+            {
+                ListaArticulos = articuloService.Listar(a => a.Costo == costo);
+            }
+            else if (filtro == "ganancia" && decimal.TryParse(valorFiltro, out decimal ganancia))
+            {
+                ListaArticulos = articuloService.Listar(a => a.Ganancia == ganancia);
+            }
         }
         else
         {
@@ -107,4 +129,4 @@
         }
     }
 }
-}
+
